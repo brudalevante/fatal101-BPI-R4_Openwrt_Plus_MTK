@@ -14,4 +14,6 @@ For other build platforms see openwrt documentation: https://openwrt.org/docs/gu
 
 `cd BPI-R4_Openwrt_Plus_MTK`
 
+`sudo chmod +x ./6.6.94.Build.sh`
+
 `./6.6.94.Build.sh`
