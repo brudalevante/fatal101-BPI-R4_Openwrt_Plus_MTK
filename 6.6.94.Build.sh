@@ -48,7 +48,7 @@ sed -i 's/CONFIG_PACKAGE_perf=y/# CONFIG_PACKAGE_perf is not set/' mtk-openwrt-f
 cd openwrt
 bash ../mtk-openwrt-feeds/autobuild/unified/autobuild.sh filogic-mac80211-mt7988_rfb-mt7996 log_file=make
 
-####### Further Builds (After 1st full build) to add whatever packages you need #######
+####### Further Builds (After 1st full build) to add the extra packages you need #######
 
 # cd openwrt
 
