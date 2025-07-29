@@ -1,4 +1,4 @@
-### openwrt_bpi-r4_mtk_builder
+### openwrt_bpi-r4_mtk_feeds_builder
 
 Run on Ubuntu 24.04 or later
 
@@ -12,8 +12,4 @@ Run on Ubuntu 24.04 or later
 
 `cd openwrt_bpi-r4_mtk_builder`
 
-`./build1.sh`
-
-After build completes, run:
-
-`./build2.sh`
+`./6.6.94.Build.sh`
