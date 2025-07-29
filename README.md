@@ -1,4 +1,4 @@
-### openwrt_bpi-r4_mtk_feeds_builder
+### BPI-R4 - Openwrt + Kernel 6.6.94 + MTK-Feeds (Very stable build)
 
 Run on Ubuntu 24.04 or later for other build platforms see openwrt documentation: https://openwrt.org/docs/guide-developer/toolchain/install-buildsystem
 
