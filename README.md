@@ -17,3 +17,9 @@ Run on Ubuntu 24.04 or later
 `sudo chmod +x ./6.6.94.Build.sh`
 
 `./6.6.94.Build.sh`
+
+### For latest compialed bpi-r4 sysupgradeb/sdcard images can be downloaded from mediafire..
+
+Images for BE14 without the eeprom issue - https://www.mediafire.com/file/esxokwcbra6gqbf/BPI_R4_Images_without_TX_Power_patches.zip/file
+
+Images for BE14 with the eeprom issue - https://www.mediafire.com/file/axy1ksnetr27988/BPI-R4_Images_with_TX_Power_patches.zip/file
