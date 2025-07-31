@@ -64,7 +64,7 @@ rm -rf mtk-openwrt-feeds/feed/app/regs/src/regs.c
 
 ### MTK_Patches - fix library searching path for veritysetup
 rm -rf mtk-openwrt-feeds/autobuild/unified/filogic/24.10/files/scripts/make-squashfs-hashed.sh
-\cp -r my_files/make-squashfs-hashed.sh autobuild/unified/filogic/24.10/files/scripts/
+\cp -r my_files/make-squashfs-hashed.sh mtk-openwrt-feeds/autobuild/unified/filogic/24.10/files/scripts/
 
 ### Add my config
 rm -rf mtk-openwrt-feeds/autobuild/unified/filogic/24.10/defconfig
