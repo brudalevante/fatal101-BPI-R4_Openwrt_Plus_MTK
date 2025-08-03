@@ -10,7 +10,7 @@ Run on Ubuntu 24.04 or later
 
 `git clone https://github.com/Gilly1970/BPI-R4_Openwrt_Plus_MTK.git`
 
-`chmod 776 -R BPI-R4_Openwrt_Plus_MTK`
+`sudo chmod 776 -R BPI-R4_Openwrt_Plus_MTK`
 
 `cd BPI-R4_Openwrt_Plus_MTK`
 
