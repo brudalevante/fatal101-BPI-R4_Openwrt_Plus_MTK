@@ -25,7 +25,7 @@ rm -rf mtk-openwrt-feeds/24.10/patches-feeds/108-strongswan-add-uci-support.patc
 ### Add patches - fix noise reading
 \cp -r my_files/200-v.kosikhin-libiwinfo-fix_noise_reading_for_radios.patch openwrt/package/network/utils/iwinfo/patches/
 
-### - TX_Power patches - I have to use both patches to fix the tx_power issue with one of my BE14 eeprom's
+### - TX_Power patches - I have to use both patches to fix the tx_power issue with one of my BE14 eeprom's (Otherwise # both lines out if your BE14 doesn't have the eeprom issue)
 \cp -r my_files/99999_tx_power_check.patch mtk-openwrt-feeds/autobuild/unified/filogic/mac80211/24.10/files/package/kernel/mt76/patches/
 \cp -r my_files/9997-use-tx_power-from-default-fw-if-EEPROM-contains-0s.patch mtk-openwrt-feeds/autobuild/unified/filogic/mac80211/24.10/files/package/kernel/mt76/patches/
 
