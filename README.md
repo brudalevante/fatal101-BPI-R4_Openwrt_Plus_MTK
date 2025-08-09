@@ -20,6 +20,6 @@ Run on Ubuntu 24.04 or later
 
 ### For latest compiled bpi-r4 sysupgradeb/sdcard images can be downloaded from mediafire..
 
-Images for BE14 without the eeprom issue - https://www.mediafire.com/file/bsegj227do6hegu/BPI_R4_Images_without_TX_Power_patches_08.08.2025.zip
+Images for BE14 without the eeprom issue - https://www.mediafire.com/file/dwplag3crenif6a/BPI_R4_Images_without_TX_Power_patches_09.08.2025.zip
 
-Images for BE14 with the eeprom issue - https://www.mediafire.com/file/oxn7c6xqvpdwvzp/BPI-R4_Images_with_TX_Power_patches_07.08.2025.zip
+Images for BE14 with the eeprom issue - https://www.mediafire.com/file/jm28xdumiui4idq/BPI-R4_Images_with_TX_Power_patches_09.08.2025.zip
