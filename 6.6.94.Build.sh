@@ -38,11 +38,10 @@ rm -rf openwrt/scripts/ipkg-remove
 \cp -r my_files/ipkg-remove openwrt/scripts/
 
 ### Openwrt_Patches etc - ucode: update to Git HEAD (2025-07-18)
-rm -rf openwrt/package/utils/Makefile
 rm -rf openwrt/package/utils/ucode/patches/020-ubus-fix-use-after-free-on-deferred-request-reply-me.patch
 rm -rf openwrt/package/utils/ucode/patches/010-ubus-fix-double-registry-clear-on-disconnect.patch
-\cp -r my_files/utils/Makefile openwrt/package/utils/
-\cp -r my_files/ucode/patches/100-ucode-add-padding-to-uc_resource_ext_t.patch openwrt/package/utils/ucode/patches/
+\cp -f my_files/ucode/Makefile openwrt/package/utils/ucode/
+\cp -f my_files/ucode/patches/100-ucode-add-padding-to-uc_resource_ext_t.patch openwrt/package/utils/ucode/patches/
 
 ### Openwrt_Patches etc - udebug: update to Git HEAD (2025-07-23)
 rm -rf openwrt/package/libs/udebug/Makefile
