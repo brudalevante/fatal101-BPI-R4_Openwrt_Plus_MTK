@@ -30,12 +30,10 @@ rm -rf mtk-openwrt-feeds/24.10/patches-feeds/108-strongswan-add-uci-support.patc
 \cp -r my_files/9997-use-tx_power-from-default-fw-if-EEPROM-contains-0s.patch mtk-openwrt-feeds/autobuild/unified/filogic/mac80211/24.10/files/package/kernel/mt76/patches/
 
 ### Openwrt_Patches etc - Update uhttpd to Git HEAD (2025-07-06)
-rm -rf openwrt/package/network/services/uhttpd/Makefile
-\cp -r my_files/uhttpd/Makefile openwrt/package/network/services/uhttpd/
+\cp -f my_files/uhttpd/Makefile openwrt/package/network/services/uhttpd/
 
 ### Openwrt_Patches etc - ipkg-remove: fix source name / package confusion (2025-07-17)
-rm -rf openwrt/scripts/ipkg-remove
-\cp -r my_files/ipkg-remove openwrt/scripts/
+\cp -f my_files/ipkg-remove openwrt/scripts/
 
 ### Openwrt_Patches etc - ucode: update to Git HEAD (2025-07-18)
 rm -rf openwrt/package/utils/ucode/patches/020-ubus-fix-use-after-free-on-deferred-request-reply-me.patch
@@ -44,20 +42,16 @@ rm -rf openwrt/package/utils/ucode/patches/010-ubus-fix-double-registry-clear-on
 \cp -f my_files/ucode/patches/100-ucode-add-padding-to-uc_resource_ext_t.patch openwrt/package/utils/ucode/patches/
 
 ### Openwrt_Patches etc - udebug: update to Git HEAD (2025-07-23)
-rm -rf openwrt/package/libs/udebug/Makefile
-\cp -r my_files/udebug/Makefile openwrt/package/libs/udebug/
+\cp -f my_files/udebug/Makefile openwrt/package/libs/udebug/
 
 ### Openwrt_Patches etc - libubox: update to Git HEAD (2025-07-23)
-rm -rf openwrt/package/libs/libubox/Makefile
-\cp -r my_files/libubox/Makefile openwrt/package/libs/libubox/
+\cp -f my_files/libubox/Makefile openwrt/package/libs/libubox/
 
 ### Openwrt_Patches etc - correctly set basic-rates with wpa_supplicant in wifi-scripts (2025-07-24)
-rm -rf openwrt/package/network/config/wifi-scripts/files/lib/netifd/hostapd.sh
-\cp -r my_files/hostapd.sh openwrt/package/network/config/wifi-scripts/files/lib/netifd/
+\cp -f my_files/hostapd.sh openwrt/package/network/config/wifi-scripts/files/lib/netifd/
 
 ### Add my config
-rm -rf mtk-openwrt-feeds/autobuild/unified/filogic/24.10/defconfig
-\cp -r my_files/defconfig mtk-openwrt-feeds/autobuild/unified/filogic/24.10/
+\cp -f my_files/defconfig mtk-openwrt-feeds/autobuild/unified/filogic/24.10/
 
 ## adjust config
 sed -i 's/CONFIG_PACKAGE_perf=y/# CONFIG_PACKAGE_perf is not set/' mtk-openwrt-feeds/autobuild/unified/filogic/mac80211/24.10/defconfig
