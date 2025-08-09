@@ -50,6 +50,9 @@ rm -rf openwrt/package/utils/ucode/patches/010-ubus-fix-double-registry-clear-on
 ### Openwrt_Patches etc - correctly set basic-rates with wpa_supplicant in wifi-scripts (2025-07-24)
 \cp -f my_files/hostapd.sh openwrt/package/network/config/wifi-scripts/files/lib/netifd/
 
+### Openwrt_Patches etc - update procd to Git HEAD (2025-08-07)
+\cp -f my_files/procd/Makefile openwrt/package/system/procd/
+
 ### Add my config
 \cp -f my_files/defconfig mtk-openwrt-feeds/autobuild/unified/filogic/24.10/
 
