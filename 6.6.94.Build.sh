@@ -53,6 +53,12 @@ rm -rf openwrt/package/utils/ucode/patches/010-ubus-fix-double-registry-clear-on
 ### Openwrt_Patches etc - update procd to Git HEAD (2025-08-07)
 \cp -f my_files/procd/Makefile openwrt/package/system/procd/
 
+### Openwrt_Patches etc - rpcd: backport ucode fix (2025-08-10)
+\cp -r my_files/rpcd/patches openwrt/package/system/rpcd/
+
+### Work_Around - To fix duplicating lanes showing under Port Status in Luci (2025-08-10)
+\cp -r /my_files/files openwrt
+
 ### Add my config
 \cp -f my_files/defconfig mtk-openwrt-feeds/autobuild/unified/filogic/24.10/
 
