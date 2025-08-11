@@ -20,13 +20,9 @@ Run on Ubuntu 24.04 or later
 
 ### For latest compiled bpi-r4 sysupgradeb/sdcard images can be downloaded from mediafire..
 
-Images for BE14 without the eeprom issue - https://www.mediafire.com/file/dwplag3crenif6a/BPI_R4_Images_without_TX_Power_patches_09.08.2025.zip
+Images for BE14 without the eeprom issue - https://www.mediafire.com/file/gru85u8pabj6a56/BPI_R4_Images_without_TX_Power_patches_10.08.2025.zip
 
-Images for BE14 with the eeprom issue - https://www.mediafire.com/file/jm28xdumiui4idq/BPI-R4_Images_with_TX_Power_patches_09.08.2025.zip
+Images for BE14 with the eeprom issue - https://www.mediafire.com/file/y2uaypanm3lqdyq/BPI-R4_Images_with_TX_Power_patches_10.08.2025.zip
 
-### Duplicating lanes showing under Port Status in Luci...
-You will see it in the Luci interface Status/Overview under Port Status. This is only a cosmetic issue and doesn't impact functionality or performanceissue in any way. To fix the duplicated Ports showing in Luci, SSH into your router and run the below SED... 
+### Temp fix now in build to correct the Duplicating lanes showing under Port Status in Luci...
 
-`sed -i '42d;43d;44d;45d;53d;54d' /etc/board.json`
-
-Please Note - If your not running one of my images then manually edit /etc/board.json instead.. The board.json file from a different build might be formated differently to my build and you could delete the wrong lines of code.
