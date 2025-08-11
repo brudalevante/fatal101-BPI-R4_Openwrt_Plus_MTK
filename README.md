@@ -24,5 +24,5 @@ Images for BE14 without the eeprom issue - https://www.mediafire.com/file/gru85u
 
 Images for BE14 with the eeprom issue - https://www.mediafire.com/file/y2uaypanm3lqdyq/BPI-R4_Images_with_TX_Power_patches_10.08.2025.zip
 
-### Temp fix now in build to correct the Duplicating lanes showing under Port Status in Luci...
+### Will add temp fix in build to correct the Duplicating lanes showing under Port Status in Luci... 
 
