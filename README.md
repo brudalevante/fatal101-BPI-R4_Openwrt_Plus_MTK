@@ -24,5 +24,5 @@ Images for BE14 without the eeprom issue - https://www.mediafire.com/file/m3hu1j
 
 Images for BE14 with the eeprom issue - https://www.mediafire.com/file/n5pmpdqxqq9t78a/BPI-R4_Images_with_TX_Power_patches_15.08.2025.zip
 
-### Updated with my new patch to fix the duplicating lan porst issue showing in Luci..
+### Updated with my new patch to fix the duplicating lan ports issue showing in Luci..
 
