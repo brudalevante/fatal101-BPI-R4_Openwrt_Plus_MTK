@@ -10,7 +10,7 @@ cd openwrt; git checkout 4a18bb1056c78e1224ae3444f5862f6265f9d91c; cd -;		### - 
 
 ### clone MTK feeds
 git clone --branch master https://git01.mediatek.com/openwrt/feeds/mtk-openwrt-feeds || true
-cd mtk-openwrt-feeds; git checkout 39d725c3e3b486405e6148c8466111ef13516808; cd -;	### - New Feed 06.08.2025
+cd mtk-openwrt-feeds; git checkout 39d725c3e3b486405e6148c8466111ef13516808; cd -;	### - New Feed 14.08.2025
 echo "39d725c" > mtk-openwrt-feeds/autobuild/unified/feed_revision
 
 ### wireless-regdb modification - this remove all regdb wireless countries restrictions
@@ -55,9 +55,22 @@ rm -rf openwrt/package/utils/ucode/patches/010-ubus-fix-double-registry-clear-on
 
 ### Openwrt_Patches etc - rpcd: backport ucode fix (2025-08-10)
 \cp -r my_files/rpcd/patches openwrt/package/system/rpcd/
+rm -rf openwrt/package/system/rpcd/.gitkeep
 
-### Work_Around - Simple fix for the duplicating Port Status in Luci (2025-08-10)
-#\cp -r my_files/files openwrt/
+### Openwrt_Patches etc - tools bash fix PKG_HASH (2025-08-11)
+\cp -f my_files/bash/Makefile openwrt/tools/bash/Makefile
+
+### Openwrt_Patches etc - hostapd: fix logging of configuration content (2025-08-12)
+\cp -f my_files/hostapd/701-reload_config_inline.patch openwrt/package/network/services/hostapd/patches/
+
+### Openwrt_Patches etc - bridger update to Git HEAD (2025-08-10)
+\cp -f my_files/bridger/Makefile openwrt/package/network/services/
+
+### MTK-Feeds-Patchs - wifi: mt76: mt7996: fix kernel panic on some tx status (2025-08-14)
+\cp -f my_files/0001-mt76-package-makefile.patch mtk-openwrt-feeds/autobuild/unified/filogic/mac80211/24.10/patches-base/
+
+### MTK-Feeds-Patchs - To fix duplicating lanes showing under Port Status in Luci (2025-08-15)
+\cp -f my_files/3703-Gillys-Remove-duplicated-ports.patch mtk-openwrt-feeds/autobuild/unified/filogic/24.10/patches-base/
 
 ### Add my config
 \cp -f my_files/defconfig mtk-openwrt-feeds/autobuild/unified/filogic/24.10/
