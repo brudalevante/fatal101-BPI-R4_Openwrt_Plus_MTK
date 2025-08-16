@@ -69,7 +69,7 @@ rm -rf openwrt/package/system/rpcd/.gitkeep
 ### MTK-Feeds-Patchs - wifi: mt76: mt7996: fix kernel panic on some tx status (2025-08-14)
 \cp -f my_files/0001-mt76-package-makefile.patch mtk-openwrt-feeds/autobuild/unified/filogic/mac80211/24.10/patches-base/
 
-### MTK-Feeds-Patchs - To fix duplicating lanes showing under Port Status in Luci (2025-08-15)
+### MTK-Feeds-Patchs - To fix duplicating ports showing under Port Status in Luci (2025-08-15)
 \cp -f my_files/3703-Gillys-Remove-duplicated-ports.patch mtk-openwrt-feeds/autobuild/unified/filogic/24.10/patches-base/
 
 ### Add my config
