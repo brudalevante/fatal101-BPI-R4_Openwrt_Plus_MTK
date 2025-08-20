@@ -75,6 +75,13 @@ rm -rf openwrt/package/system/rpcd/.gitkeep
 ### Add my config
 \cp -f my_files/defconfig mtk-openwrt-feeds/autobuild/unified/filogic/24.10/
 
+mkdir -p openwrt/package/base-files/files/etc/config
+mkdir -p openwrt/package/base-files/files/etc
+
+cp -v my_files/network openwrt/package/base-files/files/etc/config/network
+cp -v my_files/system openwrt/package/base-files/files/etc/config/system
+cp -v my_files/board.json openwrt/package/base-files/files/etc/board.json
+
 ## adjust config
 sed -i 's/CONFIG_PACKAGE_perf=y/# CONFIG_PACKAGE_perf is not set/' mtk-openwrt-feeds/autobuild/unified/filogic/mac80211/24.10/defconfig
 sed -i 's/CONFIG_PACKAGE_perf=y/# CONFIG_PACKAGE_perf is not set/' mtk-openwrt-feeds/autobuild/autobuild_5.4_mac80211_release/mt7988_wifi7_mac80211_mlo/.config
