@@ -8,7 +8,7 @@ Run on Ubuntu 24.04 or later
 
 `sudo apt install build-essential clang flex bison g++ gawk gcc-multilib g++-multilib gettext git libncurses-dev libssl-dev python3-setuptools rsync swig unzip zlib1g-dev file wget`
 
-`git clone https://github.com/Gilly1970/BPI-R4_Openwrt_Plus_MTK.git`
+`git clone https://github.com/fatal1101/BPI-R4_Openwrt_Plus_MTK.git`
 
 `sudo chmod 776 -R BPI-R4_Openwrt_Plus_MTK`
 
