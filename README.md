@@ -15,7 +15,7 @@ Anyway, the new script handles everything from cloning the source code and apply
 * **Safety Checks**: The script automatically converts file line endings with `dos2unix` to prevent issues when editing files on Windows systems.
 
 `git clone https://github.com/fatal1101/BPI-R4_Openwrt_Plus_MTK.git`
-=======
+
 ## **How to Use**
 
 1. **Prerequisites**: Ensure you have a compatible build environment, such as **Ubuntu 24.04 LTS**. You will also need to install `dos2unix`:  
