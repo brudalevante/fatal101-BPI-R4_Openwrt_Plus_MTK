@@ -79,7 +79,7 @@ If your using openwrt-24.10 commit with kernel 6.6.11 use this patch instead - 3
 
 ### **Update Notes..**
 
-* I've added a new patch that was posted by "moi_eric11" for the faulty BE14 (`999-mt7988a-bananapi-bpi-r4-BE14000-binmode.patch`) if you want to test it out?
+* I've added a new patch that was posted by "moi_eric11 and Zerogiven" for the faulty BE14 (`999-mt7988a-bananapi-bpi-r4-BE14000-binmode.patch`) if you want to test it out?
 *    - I compiled the new patch on its own without the other patches but on my test BE14 I lost the options to change the Maximum transmit power: ?
 *    - I compiled again and inculded the 9997-use-tx_power-from-default-fw-if-EEPROM-contains-0s.patch like I do with the 99999_tx_power_check.patch but still no change.
 *    - Went back to using both the 99999_tx_power_check.patch & 9997-use-tx_power-from-default-fw-if-EEPROM-contains-0s.patch for my test BE14 to work correctly again.
