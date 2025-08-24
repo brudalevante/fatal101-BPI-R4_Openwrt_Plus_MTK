@@ -21,8 +21,8 @@ set -eu
 # --- uci-defaults Scripts Selectable Options ---
 # Change this variable to select a different setup script from the 'scripts' directory.
 # To use - SETUP_SCRIPT_NAME="999-simple-dumb_AP-wifi-Setup.sh" or "" (an empty string) to skip this step entirely.
-readonly SETUP_SCRIPT_NAME="999-simple-dumb_AP-wifi-Setup.sh"
 
+readonly SETUP_SCRIPT_NAME=""
 
 # --- Variables ---
 # Define openwrt repository URL and specific commits hashes here.
