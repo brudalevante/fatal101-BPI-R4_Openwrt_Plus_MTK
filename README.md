@@ -51,31 +51,29 @@ The build process will begin and may take a significant amount of time, dependin
 
 This build is designed to be highly customizable. Here are the key directories you can modify:
 
-* `patches/`: Contains all `.patch` files and Makefiles that modify the source code. The defconfig file, which defines the build's package selection, is also located here.  
-* `files/`: This directory mirrors the root filesystem of the final image.  
+  * `patches/`: Contains all `.patch` files and Makefiles that modify the source code. The defconfig file, which defines the build's package selection, is also located here.  
+  * `files/`: This directory mirrors the root filesystem of the final image.  
   * `files/etc/`: For general configuration files like `shadow`.  
   * `files/config/`: For UCI-specific configuration files like `network, wireless, and firewall`.  
-* `scripts/`: Contains shell scripts that can be run on the first boot via the `uci-defaults` mechanism.
+  * `scripts/`: Contains shell scripts that can be run on the first boot via the `uci-defaults` mechanism.
 
 By adding or removing files in these directories, you can tailor the final firmware to your exact needs without having to modify the main build script logic.
 
 ### **For latest compiled bpi-r4 sysupgradeb/sdcard images can be downloaded from mediafire..**
 
-Images for BE14 without the eeprom issue - https://www.mediafire.com/file/m3hu1j4op8asa29/BPI_R4_Images_without_TX_Power_patches_15.08.2025.zip
+Images for BE14 without the eeprom issue - https://www.mediafire.com/file/n3zfy5ywryj3vsf/BPI_R4_Images_without_TX_Power_patches_25.08.2025.zip
 
-### **Update - I've added a new patch for those with the BE14 with the eeprom issue..**
-
-Images for BE14 with the eeprom issue - https://www.mediafire.com/file/n5pmpdqxqq9t78a/BPI-R4_Images_with_TX_Power_patches_15.08.2025.zip
+Images for BE14 with the eeprom issue - https://www.mediafire.com/file/wqo9c24ktf4h40b/BPI-R4_Images_with_TX_Power_patches_25.08.2025.zip
 
 ### **Updated with new patchs to remove the duplicating lan ports issue showing in Luci..**
 
 If your using my build or any openwrt-24.10 commits pre-kernel 6.6.100 use - 3703-Gillys-Remove-duplicated-ports.patch
 
-`cp "$SOURCE_PATCH_DIR/3703-Gillys-Remove-duplicated-ports.patch" "$MTK_FEEDS_DIR/autobuild/unified/filogic/24.10/patches-base/"`
+  `cp "$SOURCE_PATCH_DIR/3703-Gillys-Remove-duplicated-ports.patch" "$MTK_FEEDS_DIR/autobuild/unified/filogic/24.10/patches-base/"`
 
 If your using openwrt-24.10 commit with kernel 6.6.100 use this patch instead - 3703-remove-02_network.orig.patch
 
-`cp "$SOURCE_PATCH_DIR/3703-remove-02_network.orig.patch" "$MTK_FEEDS_DIR/autobuild/unified/filogic/24.10/patches-base/"`
+  `cp "$SOURCE_PATCH_DIR/3703-remove-02_network.orig.patch" "$MTK_FEEDS_DIR/autobuild/unified/filogic/24.10/patches-base/"`
 
 ### **Update Notes..**
 
