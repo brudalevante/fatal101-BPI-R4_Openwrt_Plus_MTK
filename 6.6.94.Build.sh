@@ -1,105 +1,206 @@
-##!/bin/bash
+#!/bin/bash
+# ==================================================================================
+# BPI-R4 - OpenWrt with MTK-Feeds Build Script
+# ==================================================================================
+# Please Note - IF you use the custom setup scripts for 'uci-defaults'.. As a precaution
+#               they will be auto convert with the dos2unix tool to correct any DOS line 
+#               endings that may be present. Some users edit in windows and pass the 
+#               files across to the build system, which can causes errors in unix based
+#               systems.           
+# Build system Install Note  - Run on Ubuntu 24.04 or later
+#                            - sudo apt update
+#                            - sudo apt install dos2unix
+# Usage:
+#   
+#   ./6.6.94.Build.sh
+# 
+# ==================================================================================
 
-### Clean any old builds
-rm -rf openwrt
-rm -rf mtk-openwrt-feeds
+set -eu
 
-### clone openwrt repo
-git clone --branch openwrt-24.10 https://git.openwrt.org/openwrt/openwrt.git openwrt || true
-cd openwrt; git checkout 4a18bb1056c78e1224ae3444f5862f6265f9d91c; cd -;		### - kernel 6.6.94 (Last Stable SnapShot)
+# --- uci-defaults Scripts Selectable Options ---
+# Change this variable to select a different setup script from the 'scripts' directory.
+# To use - SETUP_SCRIPT_NAME="999-simple-dumb_AP-wifi-Setup.sh" or "" (an empty string) to skip this step entirely.
 
-### clone MTK feeds
-git clone --branch master https://git01.mediatek.com/openwrt/feeds/mtk-openwrt-feeds || true
-cd mtk-openwrt-feeds; git checkout 39d725c3e3b486405e6148c8466111ef13516808; cd -;	### - New Feed 14.08.2025
-echo "39d725c" > mtk-openwrt-feeds/autobuild/unified/feed_revision
+readonly SETUP_SCRIPT_NAME=""
 
-### wireless-regdb modification - this remove all regdb wireless countries restrictions
-rm -rf openwrt/package/firmware/wireless-regdb/patches/*.*
-rm -rf mtk-openwrt-feeds/autobuild/unified/filogic/mac80211/24.10/files/package/firmware/wireless-regdb/patches/*.*
-\cp -r my_files/500-tx_power.patch mtk-openwrt-feeds/autobuild/unified/filogic/mac80211/24.10/files/package/firmware/wireless-regdb/patches
-\cp -r my_files/regdb.Makefile openwrt/package/firmware/wireless-regdb/Makefile
+# --- Variables ---
+# Define openwrt repository URL and specific commits hashes here.
+readonly OPENWRT_REPO="https://git.openwrt.org/openwrt/openwrt.git"
+readonly OPENWRT_BRANCH="openwrt-24.10"
+readonly OPENWRT_COMMIT="4a18bb1056c78e1224ae3444f5862f6265f9d91c"    # - kernel 6.6.94 (Last Stable SnapShot)
+# Define mtk-openwrt-feeds repository URL and specific commits hashes here.
+readonly MTK_FEEDS_REPO="https://git01.mediatek.com/openwrt/feeds/mtk-openwrt-feeds"
+readonly MTK_FEEDS_BRANCH="master"
+readonly MTK_FEEDS_COMMIT="1705eb8f024fde39047d1be1c9fd9c335162adff"    # - Updated to latest commit
 
-### remove mtk strongswan uci support patch
-rm -rf mtk-openwrt-feeds/24.10/patches-feeds/108-strongswan-add-uci-support.patch
+# Define local directory names.
+readonly SOURCE_PATCH_DIR="patches"
+readonly SOURCE_FILES_DIR="files"
+readonly SETUP_SCRIPT_SOURCE_DIR="scripts"
 
-### Add patches - fix noise reading
-\cp -r my_files/200-v.kosikhin-libiwinfo-fix_noise_reading_for_radios.patch openwrt/package/network/utils/iwinfo/patches/
+# Default build directories for openwrt and mtk-feeds 
+readonly OPENWRT_DIR="openwrt"
+readonly MTK_FEEDS_DIR="mtk-openwrt-feeds"
 
-### - TX_Power patches - I have to use both patches to fix the tx_power issue with one of my BE14 eeprom's (Otherwise # both lines out if your BE14 doesn't have the eeprom issue)
-\cp -r my_files/99999_tx_power_check.patch mtk-openwrt-feeds/autobuild/unified/filogic/mac80211/24.10/files/package/kernel/mt76/patches/
-\cp -r my_files/9997-use-tx_power-from-default-fw-if-EEPROM-contains-0s.patch mtk-openwrt-feeds/autobuild/unified/filogic/mac80211/24.10/files/package/kernel/mt76/patches/
+# --- Functions ---
 
-### Openwrt_Patches etc - Update uhttpd to Git HEAD (2025-07-06)
-\cp -f my_files/uhttpd/Makefile openwrt/package/network/services/uhttpd/
+log() {
+    echo "$1"
+}
 
-### Openwrt_Patches etc - ipkg-remove: fix source name / package confusion (2025-07-17)
-\cp -f my_files/ipkg-remove openwrt/scripts/
+git_clone() {
+    local repo_url=$1
+    local branch=$2
+    local commit_hash=$3
+    local target_dir=$4
 
-### Openwrt_Patches etc - ucode: update to Git HEAD (2025-07-18)
-rm -rf openwrt/package/utils/ucode/patches/020-ubus-fix-use-after-free-on-deferred-request-reply-me.patch
-rm -rf openwrt/package/utils/ucode/patches/010-ubus-fix-double-registry-clear-on-disconnect.patch
-\cp -f my_files/ucode/Makefile openwrt/package/utils/ucode/
-\cp -f my_files/ucode/patches/100-ucode-add-padding-to-uc_resource_ext_t.patch openwrt/package/utils/ucode/patches/
+    if [ -d "$target_dir" ]; then
+        log "Directory '$target_dir' already exists. Skipping clone."
+        return
+    fi
 
-### Openwrt_Patches etc - udebug: update to Git HEAD (2025-07-23)
-\cp -f my_files/udebug/Makefile openwrt/package/libs/udebug/
+    log "Cloning $branch branch from $repo_url..."
+    git clone --branch "$branch" "$repo_url" "$target_dir"
+    log "Checking out specific commit: $commit_hash"
+    (cd "$target_dir" && git checkout "$commit_hash")
+}
 
-### Openwrt_Patches etc - libubox: update to Git HEAD (2025-07-23)
-\cp -f my_files/libubox/Makefile openwrt/package/libs/libubox/
+# --- Applies all patches from the patches directory to the build tree ---
+#           - You can edit add, delete or "" any of the below patches to your liking...
+apply_patches() {
+    log "Applying custom patches..."
 
-### Openwrt_Patches etc - correctly set basic-rates with wpa_supplicant in wifi-scripts (2025-07-24)
-\cp -f my_files/hostapd.sh openwrt/package/network/config/wifi-scripts/files/lib/netifd/
+    # Wireless regulatory database modifications (removes country restrictions)
+    log "Patching wireless-regdb..."
+    rm -f "$OPENWRT_DIR/package/firmware/wireless-regdb/patches/"*
+    rm -f "$MTK_FEEDS_DIR/autobuild/unified/filogic/mac80211/24.10/files/package/firmware/wireless-regdb/patches/"*
+    cp "$SOURCE_PATCH_DIR/500-tx_power.patch" "$MTK_FEEDS_DIR/autobuild/unified/filogic/mac80211/24.10/files/package/firmware/wireless-regdb/patches/"
+    cp "$SOURCE_PATCH_DIR/regdb.Makefile" "$OPENWRT_DIR/package/firmware/wireless-regdb/Makefile"
 
-### Openwrt_Patches etc - update procd to Git HEAD (2025-08-07)
-\cp -f my_files/procd/Makefile openwrt/package/system/procd/
+    # Remove conflicting MTK strongswan patch
+    rm -f "$MTK_FEEDS_DIR/24.10/patches-feeds/108-strongswan-add-uci-support.patch"
 
-### Openwrt_Patches etc - rpcd: backport ucode fix (2025-08-10)
-\cp -r my_files/rpcd/patches openwrt/package/system/rpcd/
-rm -rf openwrt/package/system/rpcd/.gitkeep
+    # Various hardware and software patchs
+    log "Applying hardware and software patchs..."
+    cp "$SOURCE_PATCH_DIR/999-2764-net-phy-sfp-add-some-FS-copper-SFP-fixes.patch" "$OPENWRT_DIR/target/linux/mediatek/patches-6.6/"
+	cp "$SOURCE_PATCH_DIR/1007-mt7988a.dtsi.patch" "$MTK_FEEDS_DIR/24.10/patches-base/"
+    cp "$SOURCE_PATCH_DIR/200-v.kosikhin-libiwinfo-fix_noise_reading_for_radios.patch" "$OPENWRT_DIR/package/network/utils/iwinfo/patches/"
+    cp -f "$SOURCE_PATCH_DIR/0001-mt76-package-makefile.patch" "$MTK_FEEDS_DIR/autobuild/unified/filogic/mac80211/24.10/patches-base/"
+	
+	# BPI-R4 - BE14 pathces - fix EEPROM issues with the faulty BE14 cards.. (Comment out the below patches, if your card doesn't have EEPROM issues)
+    log "Applying patches for the faulty BE14 EEPROM cards..."
+	#cp "$SOURCE_PATCH_DIR/999-mt7988a-bananapi-bpi-r4-BE14000-binmode.patch" "$OPENWRT_DIR/target/linux/mediatek/patches-6.6/"  # -- New Patch
+	cp "$SOURCE_PATCH_DIR/99999_tx_power_check.patch" "$MTK_FEEDS_DIR/autobuild/unified/filogic/mac80211/24.10/files/package/kernel/mt76/patches/"
+	cp "$SOURCE_PATCH_DIR/9997-use-tx_power-from-default-fw-if-EEPROM-contains-0s.patch" "$MTK_FEEDS_DIR/autobuild/unified/filogic/mac80211/24.10/files/package/kernel/mt76/patches/"
 
-### Openwrt_Patches etc - tools bash fix PKG_HASH (2025-08-11)
-\cp -f my_files/bash/Makefile openwrt/tools/bash/Makefile
+    # Luci UI fixes
+    log "Applying Luci patch to remove duplicated ports..."
+    cp "$SOURCE_PATCH_DIR/3703-Gillys-Remove-duplicated-ports.patch" "$MTK_FEEDS_DIR/autobuild/unified/filogic/24.10/patches-base/"
 
-### Openwrt_Patches etc - hostapd: fix logging of configuration content (2025-08-12)
-\cp -f my_files/hostapd/701-reload_config_inline.patch openwrt/package/network/services/hostapd/patches/
+    # System script fixes
+    log "Applying ipkg-remove script fix..."
+    cp "$SOURCE_PATCH_DIR/ipkg-remove" "$OPENWRT_DIR/scripts/"
+}
 
-### Openwrt_Patches etc - bridger update to Git HEAD (2025-08-10)
-\cp -f my_files/bridger/Makefile openwrt/package/network/services/
+# --- Prepares custom configuration files, scripts, and permissions.
+#           - Do not change any thing below this point.. (unless you know what your doing of course ;) 
+prepare_custom_files() {
+    log "Preparing custom files and scripts..."
+    log "Checking for general /etc files..."
+    local etc_source_dir="$SOURCE_FILES_DIR/etc"
+    local etc_target_path="$OPENWRT_DIR/files/etc"
+    if [ -d "$etc_source_dir" ] && [ -n "$(ls -A "$etc_source_dir")" ]; then
+        log "Removing .gitkeep placeholder files from '$etc_source_dir'..."
+        find "$etc_source_dir" -type f -name ".gitkeep" -delete
+        log "Found files in '$etc_source_dir'. Copying to target..."
+        mkdir -p "$etc_target_path"
+        cp -r "$etc_source_dir"/. "$etc_target_path/"
+        find "$etc_target_path" -type f -exec dos2unix {} +
+    else
+        log "No general /etc files found. Skipping."
+    fi
 
-### MTK-Feeds-Patchs - wifi: mt76: mt7996: fix kernel panic on some tx status (2025-08-14)
-\cp -f my_files/0001-mt76-package-makefile.patch mtk-openwrt-feeds/autobuild/unified/filogic/mac80211/24.10/patches-base/
+    log "Checking for config files..."
+    local config_source_dir="$SOURCE_FILES_DIR/config"
+    local config_target_path="$OPENWRT_DIR/files/etc/config"
+    if [ -d "$config_source_dir" ] && [ -n "$(ls -A "$config_source_dir")" ]; then
+        log "Found files in '$config_source_dir'. Copying to target..."
+        mkdir -p "$config_target_path"
+        cp -r "$config_source_dir"/. "$config_target_path/"
+        log "Running dos2unix on all copied UCI config files..."
+        find "$config_target_path" -type f -exec dos2unix {} +
+    else
+        log "No custom config files found. Skipping."
+    fi
 
-### MTK-Feeds-Patchs - To fix duplicating ports showing under Port Status in Luci (2025-08-15)
-\cp -f my_files/3703-Gillys-Remove-duplicated-ports.patch mtk-openwrt-feeds/autobuild/unified/filogic/24.10/patches-base/
+    local uci_defaults_path="$OPENWRT_DIR/files/etc/uci-defaults"
+    if [ -n "$SETUP_SCRIPT_NAME" ]; then
+        local script_source_path="$SETUP_SCRIPT_SOURCE_DIR/$SETUP_SCRIPT_NAME"
 
-### Add my config
-\cp -f my_files/defconfig mtk-openwrt-feeds/autobuild/unified/filogic/24.10/
+        if [ ! -f "$script_source_path" ]; then
+            echo "==================================================================="
+            echo "  ERROR: Setup script not found at: $script_source_path"
+            echo "==================================================================="
+            exit 1
+        fi
 
-mkdir -p openwrt/package/base-files/files/etc/config
-mkdir -p openwrt/package/base-files/files/etc
+        log "Adding setup script: $SETUP_SCRIPT_NAME"
+        mkdir -p "$uci_defaults_path"
+        cp "$script_source_path" "$uci_defaults_path/"
+        dos2unix "$uci_defaults_path/$SETUP_SCRIPT_NAME"
+    else
+        log "No setup script selected. Skipping uci-defaults."
+    fi
 
-cp -v my_files/network openwrt/package/base-files/files/etc/config/network
-cp -v my_files/system openwrt/package/base-files/files/etc/config/system
-cp -v my_files/board.json openwrt/package/base-files/files/etc/board.json
+    log "Setting final file permissions..."
+    if [ -d "$OPENWRT_DIR/files" ]; then
+        chmod -R u=rwX,go=rX "$OPENWRT_DIR/files"
+    fi
 
-## adjust config
-sed -i 's/CONFIG_PACKAGE_perf=y/# CONFIG_PACKAGE_perf is not set/' mtk-openwrt-feeds/autobuild/unified/filogic/mac80211/24.10/defconfig
-sed -i 's/CONFIG_PACKAGE_perf=y/# CONFIG_PACKAGE_perf is not set/' mtk-openwrt-feeds/autobuild/autobuild_5.4_mac80211_release/mt7988_wifi7_mac80211_mlo/.config
-sed -i 's/CONFIG_PACKAGE_perf=y/# CONFIG_PACKAGE_perf is not set/' mtk-openwrt-feeds/autobuild/autobuild_5.4_mac80211_release/mt7986_mac80211/.config
+    if [ -n "$SETUP_SCRIPT_NAME" ] && [ -f "$uci_defaults_path/$SETUP_SCRIPT_NAME" ]; then
+        log "Making setup script executable..."
+        chmod 755 "$uci_defaults_path/$SETUP_SCRIPT_NAME"
+    fi
+}
 
-cd openwrt
-bash ../mtk-openwrt-feeds/autobuild/unified/autobuild.sh filogic-mac80211-mt7988_rfb-mt7996 log_file=make
+# --- Configures the build ---
+configure_build() {
+    log "Configuring the build..."
 
-####### Further Builds (After 1st full build) to add whatever packages you need #######
+    cp "$SOURCE_PATCH_DIR/defconfig" "$MTK_FEEDS_DIR/autobuild/unified/filogic/24.10/"
 
-# cd openwrt
+    log "Disabling 'perf' package in configs..."
+    sed -i 's/CONFIG_PACKAGE_perf=y/# CONFIG_PACKAGE_perf is not set/' "$MTK_FEEDS_DIR/autobuild/unified/filogic/mac80211/24.10/defconfig"
+    sed -i 's/CONFIG_PACKAGE_perf=y/# CONFIG_PACKAGE_perf is not set/' "$MTK_FEEDS_DIR/autobuild/autobuild_5.4_mac80211_release/mt7988_wifi7_mac80211_mlo/.config"
+    sed -i 's/CONFIG_PACKAGE_perf=y/# CONFIG_PACKAGE_perf is not set/' "$MTK_FEEDS_DIR/autobuild/autobuild_5.4_mac80211_release/mt7986_mac80211/.config"
+}
 
-# rm -rf openwrt/bin/targets/mediatek/filogic/*
 
-# ./scripts/feeds update -a \
-# ./scripts/feeds install -a
+# --- Main Script Execution ---
+main() {
+    log "Starting OpenWrt build process..."
+    log "Cleaning up previous build directories..."
+    rm -rf "$OPENWRT_DIR" "$MTK_FEEDS_DIR"
 
-# make menuconfig
-# make -j$(nproc)
+    git_clone "$OPENWRT_REPO" "$OPENWRT_BRANCH" "$OPENWRT_COMMIT" "$OPENWRT_DIR"
+    git_clone "$MTK_FEEDS_REPO" "$MTK_FEEDS_BRANCH" "$MTK_FEEDS_COMMIT" "$MTK_FEEDS_DIR"
+    
+    echo "${MTK_FEEDS_COMMIT:0:7}" > "$MTK_FEEDS_DIR/autobuild/unified/feed_revision"
+
+    apply_patches
+
+    prepare_custom_files
+
+    configure_build
+
+    log "Starting the MediaTek autobuild script..."
+    (cd "$OPENWRT_DIR" && bash "../$MTK_FEEDS_DIR/autobuild/unified/autobuild.sh" filogic-mac80211-mt7988_rfb-mt7996 log_file=make)
+
+    log "Build process finished successfully!"
+    log "You can find the output images in '$OPENWRT_DIR/bin/targets/mediatek/filogic/'"
+}
+
+main
 
 exit 0
