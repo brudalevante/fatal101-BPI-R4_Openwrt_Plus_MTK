@@ -12,7 +12,7 @@ The new script handles everything from cloning the source code and applying cust
   * Place your custom configuration files (`like wireless, network, firewall, or shadow`) in the `files/` directory to have them included in the final image.  
   * Use a custom `.config` file (`defconfig`) to define the exact packages and kernel modules for your build.  
 * **First-Boot Setup Scripts**: Add setup scripts to the `scripts/` directory, which will run on the device's first boot to automate initial configuration (e.g., setting up a dumb AP).  
-* **Safety Checks**: The script automatically converts file line endings with `dos2unix` to prevent issues when editing files on Windows.
+* **Safety Checks**: The script automatically converts file line endings with `dos2unix` to prevent issues when editing files on Windows systems.
 
 ## **How to Use**
 
