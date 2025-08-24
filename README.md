@@ -1,8 +1,8 @@
 # **BPI-R4 - Openwrt + Kernel 6.6.94 + MTK-Feeds**
 
-I finally found some time to finish reworking the 6.6.94.Build script to make it a bit more user friendly for those users that aren't as familiar with linux based systems.
+I finally found some time and finish off the new 6.6.94.Build script that I've been working on for sometime now. The purpose was to try simplify it for my test builds and for those that are less familiar with linux based systems that jsut want to build a working image for their BPI-R4.. Most of the current snapshot inculding kernel 6.6.11 are not that stable and every time I try the lates commit I'm down grading back to 6.6.94.
 
-The new script handles everything from cloning the source code and applying custom patches to configuring the build and preparing user-specific files.
+Anyway, the new script handles everything from cloning the source code and applying custom patches to configuring the build and preparing user-specific files.
 
 ## **Features**
 
