@@ -84,6 +84,7 @@ apply_patches() {
     # Various hardware and software patchs
     log "Applying hardware and software patchs..."
     cp "$SOURCE_PATCH_DIR/999-2764-net-phy-sfp-add-some-FS-copper-SFP-fixes.patch" "$OPENWRT_DIR/target/linux/mediatek/patches-6.6/"
+	cp "$SOURCE_PATCH_DIR/1007-mt7988a.dtsi.patch" "$MTK_FEEDS_DIR/24.10/patches-base/"
     cp "$SOURCE_PATCH_DIR/200-v.kosikhin-libiwinfo-fix_noise_reading_for_radios.patch" "$OPENWRT_DIR/package/network/utils/iwinfo/patches/"
     cp -f "$SOURCE_PATCH_DIR/0001-mt76-package-makefile.patch" "$MTK_FEEDS_DIR/autobuild/unified/filogic/mac80211/24.10/patches-base/"
 	
