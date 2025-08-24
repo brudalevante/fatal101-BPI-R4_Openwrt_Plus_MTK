@@ -69,11 +69,11 @@ Images for BE14 with the eeprom issue - https://www.mediafire.com/file/n5pmpdqxq
 
 ### **Updated with new patchs to remove the duplicating lan ports issue showing in Luci..**
 
-If your using my build or any openwrt-24.10 commits pre-kernel 6.6.11 use - 3703-Gillys-Remove-duplicated-ports.patch
+If your using my build or any openwrt-24.10 commits pre-kernel 6.6.100 use - 3703-Gillys-Remove-duplicated-ports.patch
 
 `cp "$SOURCE_PATCH_DIR/3703-Gillys-Remove-duplicated-ports.patch" "$MTK_FEEDS_DIR/autobuild/unified/filogic/24.10/patches-base/"`
 
-If your using openwrt-24.10 commit with kernel 6.6.11 use this patch instead - 3703-remove-02_network.orig.patch
+If your using openwrt-24.10 commit with kernel 6.6.100 use this patch instead - 3703-remove-02_network.orig.patch
 
 `cp "$SOURCE_PATCH_DIR/3703-remove-02_network.orig.patch" "$MTK_FEEDS_DIR/autobuild/unified/filogic/24.10/patches-base/"`
 
