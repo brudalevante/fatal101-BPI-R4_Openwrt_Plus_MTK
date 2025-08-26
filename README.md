@@ -4,6 +4,8 @@ I finally found some time and finish off the new 6.6.94.Build script that I've b
 
 Anyway, the new script handles everything from cloning the source code and applying custom patches to configuring the build and preparing user-specific files.
 
+Update 26.08.2025 - Small fix to the logic removing .gitkeep files from the files directory.
+
 ## **Features**
 
 * **Automated Build Process**: Clones the correct versions of OpenWrt and the MediaTek feeds from scratch for a clean, reproducible build every time.  
