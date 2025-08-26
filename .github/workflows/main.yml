@@ -54,9 +54,9 @@ jobs:
       - name: Run OpenWrt Build Script
         run: |
           echo "Making build script executable..."
-          chmod +x bpi-r4-openwrt-builder.sh
+          chmod +x 6.6.94.Build..sh
           echo "Starting OpenWrt build process with your script..."
-          ./bpi-r4-openwrt-builder.sh
+          ./6.6.94.Build..sh
 
           echo "Build script finished. Checking for compiled firmware..."
 
