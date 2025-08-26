@@ -3,25 +3,30 @@
 # BPI-R4 - OpenWrt with MTK-Feeds Build Script
 # ==================================================================================
 # Please Note - IF you use the custom setup scripts for 'uci-defaults'.. As a precaution
-#               they will be auto convert with the dos2unix tool to correct any DOS line 
-#               endings that may be present. Some users edit in windows and pass the 
-#               files across to the build system, which can causes errors in unix based
-#               systems.           
+#                 they will be auto convert with the dos2unix tool to correct any DOS line
+#                 endings that may be present. Some users edit in windows and pass the
+#                 files across to the build system, which can causes errors in unix based
+#                 systems.
 # Build system Install Note  - Run on Ubuntu 24.04 or later
 #                            - sudo apt update
 #                            - sudo apt install dos2unix
 # Usage:
-#   
+#
 #   ./6.6.94.Build.sh
-# 
+#
 # ==================================================================================
 
 set -eu
 
+# --- Dependency Check ---
+if ! command -v dos2unix &> /dev/null; then
+    echo "ERROR: 'dos2unix' is not installed. Please run 'sudo apt update && sudo apt install dos2unix'."
+    exit 1
+fi
+
 # --- uci-defaults Scripts Selectable Options ---
 # Change this variable to select a different setup script from the 'scripts' directory.
 # To use - SETUP_SCRIPT_NAME="999-simple-dumb_AP-wifi-Setup.sh" or "" (an empty string) to skip this step entirely.
-
 readonly SETUP_SCRIPT_NAME=""
 
 # --- Variables ---
@@ -39,7 +44,7 @@ readonly SOURCE_PATCH_DIR="patches"
 readonly SOURCE_FILES_DIR="files"
 readonly SETUP_SCRIPT_SOURCE_DIR="scripts"
 
-# Default build directories for openwrt and mtk-feeds 
+# Default build directories for openwrt and mtk-feeds
 readonly OPENWRT_DIR="openwrt"
 readonly MTK_FEEDS_DIR="mtk-openwrt-feeds"
 
@@ -67,7 +72,7 @@ git_clone() {
 }
 
 # --- Applies all patches from the patches directory to the build tree ---
-#           - You can edit add, delete or "" any of the below patches to your liking...
+#         - You can edit add, delete or "" any of the below patches to your liking...
 apply_patches() {
     log "Applying custom patches..."
 
@@ -84,15 +89,15 @@ apply_patches() {
     # Various hardware and software patchs
     log "Applying hardware and software patchs..."
     cp "$SOURCE_PATCH_DIR/999-2764-net-phy-sfp-add-some-FS-copper-SFP-fixes.patch" "$OPENWRT_DIR/target/linux/mediatek/patches-6.6/"
-	cp "$SOURCE_PATCH_DIR/1007-mt7988a.dtsi.patch" "$MTK_FEEDS_DIR/24.10/patches-base/"
+    cp "$SOURCE_PATCH_DIR/1007-mt7988a.dtsi.patch" "$MTK_FEEDS_DIR/24.10/patches-base/"
     cp "$SOURCE_PATCH_DIR/200-v.kosikhin-libiwinfo-fix_noise_reading_for_radios.patch" "$OPENWRT_DIR/package/network/utils/iwinfo/patches/"
     cp -f "$SOURCE_PATCH_DIR/0001-mt76-package-makefile.patch" "$MTK_FEEDS_DIR/autobuild/unified/filogic/mac80211/24.10/patches-base/"
-	
-	# BPI-R4 - BE14 pathces - fix EEPROM issues with the faulty BE14 cards.. (Comment out the below patches, if your card doesn't have EEPROM issues)
+
+    # BPI-R4 - BE14 pathces - fix EEPROM issues with the faulty BE14 cards.. (Comment out the below patches, if your card doesn't have EEPROM issues)
     log "Applying patches for the faulty BE14 EEPROM cards..."
-	#cp "$SOURCE_PATCH_DIR/999-mt7988a-bananapi-bpi-r4-BE14000-binmode.patch" "$OPENWRT_DIR/target/linux/mediatek/patches-6.6/"  # -- New Patch
-	cp "$SOURCE_PATCH_DIR/99999_tx_power_check.patch" "$MTK_FEEDS_DIR/autobuild/unified/filogic/mac80211/24.10/files/package/kernel/mt76/patches/"
-	cp "$SOURCE_PATCH_DIR/9997-use-tx_power-from-default-fw-if-EEPROM-contains-0s.patch" "$MTK_FEEDS_DIR/autobuild/unified/filogic/mac80211/24.10/files/package/kernel/mt76/patches/"
+    #cp "$SOURCE_PATCH_DIR/999-mt7988a-bananapi-bpi-r4-BE14000-binmode.patch" "$OPENWRT_DIR/target/linux/mediatek/patches-6.6/"  # -- New Patch
+    cp "$SOURCE_PATCH_DIR/99999_tx_power_check.patch" "$MTK_FEEDS_DIR/autobuild/unified/filogic/mac80211/24.10/files/package/kernel/mt76/patches/"
+    cp "$SOURCE_PATCH_DIR/9997-use-tx_power-from-default-fw-if-EEPROM-contains-0s.patch" "$MTK_FEEDS_DIR/autobuild/unified/filogic/mac80211/24.10/files/package/kernel/mt76/patches/"
 
     # Luci UI fixes
     log "Applying Luci patch to remove duplicated ports..."
@@ -103,64 +108,67 @@ apply_patches() {
     cp "$SOURCE_PATCH_DIR/ipkg-remove" "$OPENWRT_DIR/scripts/"
 }
 
+# Helper function to process a single source directory
+process_source_dir() {
+    local source_dir="$1"
+    local target_path="$2"
+    local dir_name
+    dir_name=$(basename "$source_dir")
+
+    log "Checking for '$dir_name' files in '$source_dir'..."
+
+    if [ ! -d "$source_dir" ]; then
+        log "Source directory for '$dir_name' not found. Skipping."
+        return
+    fi
+
+    # Specifically find and remove any .gitkeep files first
+    if find "$source_dir" -mindepth 1 -maxdepth 3 -type f -name ".gitkeep" | read; then
+        log "Removing .gitkeep placeholder from '$source_dir'..."
+        find "$source_dir" -mindepth 1 -maxdepth 3 -type f -name ".gitkeep" -delete
+    fi
+
+    # Now, check if there are any *actual* files or directories left to copy
+    if [ -n "$(ls -A "$source_dir")" ]; then
+        log "Found files in '$source_dir'. Copying to '$target_path'..."
+        mkdir -p "$target_path"
+        cp -a "$source_dir"/. "$target_path/" # Using -a preserves more attributes
+
+        log "Running dos2unix on all copied files in '$target_path'..."
+        find "$target_path" -type f -exec dos2unix {} +
+    else
+        log "No '$dir_name' files to copy. Skipping."
+    fi
+}
+
 # --- Prepares custom configuration files, scripts, and permissions.
-#           - Do not change any thing below this point.. (unless you know what your doing of course ;) 
 prepare_custom_files() {
     log "Preparing custom files and scripts..."
-    log "Checking for general /etc files..."
-    local etc_source_dir="$SOURCE_FILES_DIR/etc"
-    local etc_target_path="$OPENWRT_DIR/files/etc"
-    if [ -d "$etc_source_dir" ] && [ -n "$(ls -A "$etc_source_dir")" ]; then
-        log "Removing .gitkeep placeholder files from '$etc_source_dir'..."
-        find "$etc_source_dir" -type f -name ".gitkeep" -delete
-        log "Found files in '$etc_source_dir'. Copying to target..."
-        mkdir -p "$etc_target_path"
-        cp -r "$etc_source_dir"/. "$etc_target_path/"
-        find "$etc_target_path" -type f -exec dos2unix {} +
-    else
-        log "No general /etc files found. Skipping."
-    fi
 
-    log "Checking for config files..."
-    local config_source_dir="$SOURCE_FILES_DIR/config"
-    local config_target_path="$OPENWRT_DIR/files/etc/config"
-    if [ -d "$config_source_dir" ] && [ -n "$(ls -A "$config_source_dir")" ]; then
-        log "Found files in '$config_source_dir'. Copying to target..."
-        mkdir -p "$config_target_path"
-        cp -r "$config_source_dir"/. "$config_target_path/"
-        log "Running dos2unix on all copied UCI config files..."
-        find "$config_target_path" -type f -exec dos2unix {} +
-    else
-        log "No custom config files found. Skipping."
-    fi
+    # Process the general /etc files
+    process_source_dir "$SOURCE_FILES_DIR/etc" "$OPENWRT_DIR/files/etc"
 
+    # Process the specific /etc/config files
+    process_source_dir "$SOURCE_FILES_DIR/config" "$OPENWRT_DIR/files/etc/config"
+
+    # Handle the uci-defaults setup script
     local uci_defaults_path="$OPENWRT_DIR/files/etc/uci-defaults"
     if [ -n "$SETUP_SCRIPT_NAME" ]; then
         local script_source_path="$SETUP_SCRIPT_SOURCE_DIR/$SETUP_SCRIPT_NAME"
-
         if [ ! -f "$script_source_path" ]; then
-            echo "==================================================================="
-            echo "  ERROR: Setup script not found at: $script_source_path"
-            echo "==================================================================="
+            log "==================================================================="
+            log "  ERROR: Setup script not found at: $script_source_path"
+            log "==================================================================="
             exit 1
         fi
-
         log "Adding setup script: $SETUP_SCRIPT_NAME"
         mkdir -p "$uci_defaults_path"
         cp "$script_source_path" "$uci_defaults_path/"
         dos2unix "$uci_defaults_path/$SETUP_SCRIPT_NAME"
-    else
-        log "No setup script selected. Skipping uci-defaults."
-    fi
-
-    log "Setting final file permissions..."
-    if [ -d "$OPENWRT_DIR/files" ]; then
-        chmod -R u=rwX,go=rX "$OPENWRT_DIR/files"
-    fi
-
-    if [ -n "$SETUP_SCRIPT_NAME" ] && [ -f "$uci_defaults_path/$SETUP_SCRIPT_NAME" ]; then
         log "Making setup script executable..."
         chmod 755 "$uci_defaults_path/$SETUP_SCRIPT_NAME"
+    else
+        log "No setup script selected. Skipping uci-defaults."
     fi
 }
 
@@ -185,7 +193,7 @@ main() {
 
     git_clone "$OPENWRT_REPO" "$OPENWRT_BRANCH" "$OPENWRT_COMMIT" "$OPENWRT_DIR"
     git_clone "$MTK_FEEDS_REPO" "$MTK_FEEDS_BRANCH" "$MTK_FEEDS_COMMIT" "$MTK_FEEDS_DIR"
-    
+
     echo "${MTK_FEEDS_COMMIT:0:7}" > "$MTK_FEEDS_DIR/autobuild/unified/feed_revision"
 
     apply_patches
