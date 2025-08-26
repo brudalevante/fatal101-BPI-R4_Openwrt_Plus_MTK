@@ -37,7 +37,7 @@ readonly OPENWRT_COMMIT="4a18bb1056c78e1224ae3444f5862f6265f9d91c"    # - kernel
 # Define mtk-openwrt-feeds repository URL and specific commits hashes here.
 readonly MTK_FEEDS_REPO="https://git01.mediatek.com/openwrt/feeds/mtk-openwrt-feeds"
 readonly MTK_FEEDS_BRANCH="master"
-readonly MTK_FEEDS_COMMIT="1705eb8f024fde39047d1be1c9fd9c335162adff"    # - Updated to latest commit
+readonly MTK_FEEDS_COMMIT="87cde8ff0e4d69caf6da5650eadefefb8e5c6b58"    # - Updated to latest commit
 
 # Define local directory names.
 readonly SOURCE_PATCH_DIR="patches"
@@ -98,6 +98,10 @@ apply_patches() {
     #cp "$SOURCE_PATCH_DIR/999-mt7988a-bananapi-bpi-r4-BE14000-binmode.patch" "$OPENWRT_DIR/target/linux/mediatek/patches-6.6/"  # -- New Patch
     cp "$SOURCE_PATCH_DIR/99999_tx_power_check.patch" "$MTK_FEEDS_DIR/autobuild/unified/filogic/mac80211/24.10/files/package/kernel/mt76/patches/"
     cp "$SOURCE_PATCH_DIR/9997-use-tx_power-from-default-fw-if-EEPROM-contains-0s.patch" "$MTK_FEEDS_DIR/autobuild/unified/filogic/mac80211/24.10/files/package/kernel/mt76/patches/"
+	
+	# Fix broke netdev trigger LEDs offloaded to PHYs patchs
+	log "Applying patches for broke netdev trigger LEDs offloaded to PHYs patch..."
+	cp "$SOURCE_PATCH_DIR/847-v6.17-Revert-leds-trigger-netdev-Configure-LED-blink-inter.patch" "$OPENWRT_DIR/target/linux/generic/backport-6.6/"
 
     # Luci UI fixes
     log "Applying Luci patch to remove duplicated ports..."

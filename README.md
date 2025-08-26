@@ -6,6 +6,8 @@ Anyway, the new script handles everything from cloning the source code and apply
 
 Update 26.08.2025 - Added dependency check and a small fix to the logic removing .gitkeep files from the files directory.
 
+Update 27.08.2025 - Added proper fix for netdev trigger LEDs offloaded to PHYs patch
+
 ## **Features**
 
 * **Automated Build Process**: Clones the correct versions of OpenWrt and the MediaTek feeds from scratch for a clean, reproducible build every time.  
