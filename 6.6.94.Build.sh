@@ -83,8 +83,10 @@ apply_patches() {
     cp "$SOURCE_PATCH_DIR/500-tx_power.patch" "$MTK_FEEDS_DIR/autobuild/unified/filogic/mac80211/24.10/files/package/firmware/wireless-regdb/patches/"
     cp "$SOURCE_PATCH_DIR/regdb.Makefile" "$OPENWRT_DIR/package/firmware/wireless-regdb/Makefile"
 
-    # Remove conflicting MTK strongswan patch
+    # Remove conflicting MTK strongswan patch & Remove modules.builtin
+	log "Removing MTK strongswan patch & modules.builtin..."
     rm -f "$MTK_FEEDS_DIR/24.10/patches-feeds/108-strongswan-add-uci-support.patch"
+	rm -f "$OPENWRT_DIR/target/linux/mediatek/files/drivers/net/phy/rtk/modules.builtin"
 
     # Various hardware and software patchs
     log "Applying hardware and software patchs..."
