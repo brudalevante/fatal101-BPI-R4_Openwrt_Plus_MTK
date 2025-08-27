@@ -112,7 +112,8 @@ apply_patches() {
     cp "$SOURCE_PATCH_DIR/ipkg-remove" "$OPENWRT_DIR/scripts/"
 }
 
-# Helper function to process a single source directory
+# --- Prepares custom configuration files, scripts, and permissions.
+#           - Do not change any thing below this point.. (unless you know what your doing of course ;) 
 process_source_dir() {
     local source_dir="$1"
     local target_path="$2"
@@ -126,17 +127,15 @@ process_source_dir() {
         return
     fi
 
-    # Specifically find and remove any .gitkeep files first
     if find "$source_dir" -mindepth 1 -maxdepth 3 -type f -name ".gitkeep" | read; then
         log "Removing .gitkeep placeholder from '$source_dir'..."
         find "$source_dir" -mindepth 1 -maxdepth 3 -type f -name ".gitkeep" -delete
     fi
 
-    # Now, check if there are any *actual* files or directories left to copy
     if [ -n "$(ls -A "$source_dir")" ]; then
         log "Found files in '$source_dir'. Copying to '$target_path'..."
         mkdir -p "$target_path"
-        cp -a "$source_dir"/. "$target_path/" # Using -a preserves more attributes
+        cp -a "$source_dir"/. "$target_path/"
 
         log "Running dos2unix on all copied files in '$target_path'..."
         find "$target_path" -type f -exec dos2unix {} +
@@ -145,17 +144,13 @@ process_source_dir() {
     fi
 }
 
-# --- Prepares custom configuration files, scripts, and permissions.
 prepare_custom_files() {
     log "Preparing custom files and scripts..."
 
-    # Process the general /etc files
     process_source_dir "$SOURCE_FILES_DIR/etc" "$OPENWRT_DIR/files/etc"
 
-    # Process the specific /etc/config files
     process_source_dir "$SOURCE_FILES_DIR/config" "$OPENWRT_DIR/files/etc/config"
 
-    # Handle the uci-defaults setup script
     local uci_defaults_path="$OPENWRT_DIR/files/etc/uci-defaults"
     if [ -n "$SETUP_SCRIPT_NAME" ]; then
         local script_source_path="$SETUP_SCRIPT_SOURCE_DIR/$SETUP_SCRIPT_NAME"
