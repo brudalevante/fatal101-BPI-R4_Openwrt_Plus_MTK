@@ -110,7 +110,7 @@ apply_patches() {
 
     # Luci UI fixes
     log "Applying Luci patch to remove duplicated ports..."
-    cp "$SOURCE_PATCH_DIR/3703-commit-fa0f04a-Remove-duplicated-ports.patch" "$MTK_FEEDS_DIR/autobuild/unified/filogic/24.10/patches-base/"
+    cp "$SOURCE_PATCH_DIR/3703-Gillys-Remove-duplicated-ports.patch" "$MTK_FEEDS_DIR/autobuild/unified/filogic/24.10/patches-base/"
 
     # System script fixes
     log "Applying ipkg-remove script fix..."
