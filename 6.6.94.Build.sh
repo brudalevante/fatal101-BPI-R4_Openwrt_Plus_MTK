@@ -37,7 +37,7 @@ readonly OPENWRT_COMMIT="4a18bb1056c78e1224ae3444f5862f6265f9d91c"    # - kernel
 # Define mtk-openwrt-feeds repository URL and specific commits hashes here.
 readonly MTK_FEEDS_REPO="https://git01.mediatek.com/openwrt/feeds/mtk-openwrt-feeds"
 readonly MTK_FEEDS_BRANCH="master"
-readonly MTK_FEEDS_COMMIT="fa0f04a490276b42b2af6d3508c7272072061592"    # - Updated to latest commit
+readonly MTK_FEEDS_COMMIT="e8e55a4db2dcd72486531ba0b30d278059c9c949"    # - Updated to latest commit
 
 # Define local directory names.
 readonly SOURCE_PATCH_DIR="patches"
@@ -97,7 +97,6 @@ apply_patches() {
 	# Update patches for kernel 6.6.94-mt79-Make to latest commits..
     log "Applying patchs to to update kernel 6.6.94 mt79_Make..."
     cp -f "$SOURCE_PATCH_DIR/0001-mt76-package-makefile.patch" "$MTK_FEEDS_DIR/autobuild/unified/filogic/mac80211/24.10/patches-base/"
-	cp -f "$SOURCE_PATCH_DIR/0002-mt76-package-makefile.patch" "$MTK_FEEDS_DIR/autobuild/unified/filogic/mac80211/24.10/patches-base/"
 
     # BPI-R4 - BE14 pathces - fix EEPROM issues with the faulty BE14 cards.. (Comment out the below patches, if your card doesn't have EEPROM issues)
     log "Applying patches for the faulty BE14 EEPROM cards..."
