@@ -10,6 +10,8 @@ Update 27.08.2025 - Added proper fix for netdev trigger LEDs offloaded to PHYs p
 
 Update 28.08.2025 - Added updated 3703-git-head-2025-08-27-Remove-duplicated-ports.patch for commit: 64bbe71219d65a5c3c17409e8b2a1b78c2d9f9c0
 
+Update 29.08.2025 - Update patches for kernel 6.6.94-mt79-Make to latest MTK commits..
+
 ## **Features**
 
 * **Automated Build Process**: Clones the correct versions of OpenWrt and the MediaTek feeds from scratch for a clean, reproducible build every time.  
