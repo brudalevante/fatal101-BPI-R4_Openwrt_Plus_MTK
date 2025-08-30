@@ -65,7 +65,7 @@ By adding or removing files in these directories, you can tailor the final firmw
 
 ### **For latest compiled bpi-r4 sysupgradeb/sdcard images can be downloaded from mediafire..**
 
-Images for BE14 without the eeprom issue - https://www.mediafire.com/file/n3zfy5ywryj3vsf/BPI_R4_Images_without_TX_Power_patches_25.08.2025.zip
+Images for BE14 without the eeprom issue - https://www.mediafire.com/file/rdcl4cobm88a2tb/BPI_R4_Images_without_TX_Power_patches_30.08.2025.zip
 
 Images for BE14 with the eeprom issue - https://www.mediafire.com/file/5r2r1rh0me9f6zl/BPI-R4_Images_with_TX_Power_patches_30.08.2025.zip
 
