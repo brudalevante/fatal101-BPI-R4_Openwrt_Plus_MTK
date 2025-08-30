@@ -4,15 +4,9 @@ I finally found some time and finish off the new 6.6.94.Build script that I've b
 
 Anyway, the new script handles everything from cloning the source code and applying custom patches to configuring the build and preparing user-specific files.
 
-Update 26.08.2025 - Added dependency check and a small fix to the logic removing .gitkeep files from the files directory.
+Update 30.08.2025 - Updated, fixed new MTK patches which were causing build fail on kernel 6.6.94.
 
-Update 27.08.2025 - Added proper fix for netdev trigger LEDs offloaded to PHYs patch
-
-Update 28.08.2025 - Added updated 3703-git-head-2025-08-27-Remove-duplicated-ports.patch for commit: 64bbe71219d65a5c3c17409e8b2a1b78c2d9f9c0
-
-Update 30.08.2025 - Updated patches for kernel 6.6.94-mt79-Make to latest commits. 
-                  - Fixed build fail with new MTK trng-driver-porting.patch which was targeting kernal-6.6.102.. (Reverted patch to kernal-6.6.94)
-				  - Updated patch causing build fail with hostpad
+Update 30.08.2025 - Repo is now up to date with MTK commit: 3b4a13b14884e4eb1a4229e586390a1fd226ab82
 
 ## **Features**
 
@@ -73,7 +67,7 @@ By adding or removing files in these directories, you can tailor the final firmw
 
 Images for BE14 without the eeprom issue - https://www.mediafire.com/file/n3zfy5ywryj3vsf/BPI_R4_Images_without_TX_Power_patches_25.08.2025.zip
 
-Images for BE14 with the eeprom issue - https://www.mediafire.com/file/wqo9c24ktf4h40b/BPI-R4_Images_with_TX_Power_patches_25.08.2025.zip
+Images for BE14 with the eeprom issue - https://www.mediafire.com/file/5r2r1rh0me9f6zl/BPI-R4_Images_with_TX_Power_patches_30.08.2025.zip
 
 ### **Updated with new patchs to remove the duplicating lan ports issue showing in Luci..**
 
