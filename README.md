@@ -4,7 +4,9 @@ I finally found some time and finish off the new 6.6.94.Build script that I've b
 
 Anyway, the new script handles everything from cloning the source code and applying custom patches to configuring the build and preparing user-specific files.
 
-Update 26.08.2025 - Added dependency check and a small fix to the logic removing .gitkeep files from the files directory.
+Update 30.08.2025 - Updated, fixed new MTK patches which were causing build fail on kernel 6.6.94.
+
+Update 30.08.2025 - Repo is now up to date with MTK commit: 3b4a13b14884e4eb1a4229e586390a1fd226ab82
 
 ## **Features**
 
@@ -63,9 +65,9 @@ By adding or removing files in these directories, you can tailor the final firmw
 
 ### **For latest compiled bpi-r4 sysupgradeb/sdcard images can be downloaded from mediafire..**
 
-Images for BE14 without the eeprom issue - https://www.mediafire.com/file/n3zfy5ywryj3vsf/BPI_R4_Images_without_TX_Power_patches_25.08.2025.zip
+Images for BE14 without the eeprom issue - https://www.mediafire.com/file/rdcl4cobm88a2tb/BPI_R4_Images_without_TX_Power_patches_30.08.2025.zip
 
-Images for BE14 with the eeprom issue - https://www.mediafire.com/file/wqo9c24ktf4h40b/BPI-R4_Images_with_TX_Power_patches_25.08.2025.zip
+Images for BE14 with the eeprom issue - https://www.mediafire.com/file/5r2r1rh0me9f6zl/BPI-R4_Images_with_TX_Power_patches_30.08.2025.zip
 
 ### **Updated with new patchs to remove the duplicating lan ports issue showing in Luci..**
 
